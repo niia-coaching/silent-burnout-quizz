@@ -1,0 +1,21 @@
+# Cloudflare Pages configuration (optional)
+# This file is only needed if you want to deploy via Wrangler CLI
+# Dashboard deployment works without this file
+
+name = "niia-silent-burnout-quizz"
+compatibility_date = "2024-01-01"
+
+[build]
+command = "npm run build"
+cwd = "."
+
+[build.upload]
+format = "directory"
+dir = "dist"
+
+# SPA routing - redirect all routes to index.html
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
