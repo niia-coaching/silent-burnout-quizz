@@ -265,7 +265,8 @@ const styles = StyleSheet.create({
   introSheet: {
     backgroundColor: "#F4EFE9",
     borderRadius: 20,
-    padding: 35,
+    padding: 30,
+    paddingHorizontal: 120,
     width: "96%",
     maxWidth: 700,
     maxHeight: "98%",
@@ -277,7 +278,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "bold",
     color: "#1c3b5a",
-    marginBottom: 25,
+    marginBottom: 20,
     textAlign: "center",
     letterSpacing: 0.5,
   },
@@ -288,12 +289,12 @@ const styles = StyleSheet.create({
   },
   introImageContainer: {
     alignItems: "center",
-    marginBottom: 25,
+    marginBottom: 20,
   },
   introImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     objectFit: "cover",
   },
   introParagraph: {
@@ -307,8 +308,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     color: "#1c3b5a",
-    marginTop: 15,
-    marginBottom: 5,
+    textAlign: "center",
   },
   introRole: {
     fontSize: 9.5,
@@ -888,7 +888,7 @@ const IntroductionPage = () => {
         </View>
 
         {/* Section 1 */}
-        <View style={{ marginBottom: 20 }}>
+        <View>
           <Text style={styles.introParagraph}>
             Si tu te reconnais dans ces mots, sache une chose :{" "}
             <Text style={{ fontWeight: "bold" }}>tu n'as rien de cassé.</Text>
@@ -903,11 +903,11 @@ const IntroductionPage = () => {
               color: "#1c3b5a",
               textAlign: "center",
               fontStyle: "italic",
-              marginTop: 8,
             }}
           >
             Ton corps, ton mental et ton cœur essaient simplement de te dire :
-            {"\n"}"Ralentis, écoute-toi."
+            {"\n"}
+            <Text style={{ fontWeight: "bold" }}> "Ralentis, écoute-toi."</Text>
           </Text>
         </View>
 
@@ -922,7 +922,7 @@ const IntroductionPage = () => {
         />
 
         {/* Section 2 */}
-        <View style={{ marginBottom: 20 }}>
+        <View>
           <Text style={styles.introParagraph}>
             Je suis <Text style={{ fontWeight: "bold" }}>Ayoub Sadry</Text>,
             fondateur de NIIA Coaching.
@@ -931,7 +931,7 @@ const IntroductionPage = () => {
             J'ai connu moi aussi cette fatigue qui ne part pas, ce vide
             intérieur malgré la réussite.
           </Text>
-          <Text style={styles.introParagraph}>
+          <Text style={{ ...styles.introParagraph, marginBottom: 0 }}>
             C'est de cette traversée qu'est née la{" "}
             <Text style={{ fontWeight: "bold" }}>méthode IMPACT</Text> — un
             chemin pour retrouver ton énergie, ta clarté et ton pouvoir
@@ -950,7 +950,7 @@ const IntroductionPage = () => {
         />
 
         {/* Section 3 */}
-        <View style={{ marginBottom: 20 }}>
+        <View>
           <Text style={styles.introParagraph}>
             Ce diagnostic n'est pas un test, mais une{" "}
             <Text style={{ fontWeight: "bold" }}>boussole</Text>.
@@ -958,7 +958,7 @@ const IntroductionPage = () => {
           <Text style={styles.introParagraph}>
             Il t'aide à voir où ton énergie fuit, pour mieux la restaurer.
           </Text>
-          <Text style={styles.introParagraph}>
+          <Text style={{ ...styles.introParagraph, marginBottom: 0 }}>
             Et si tu veux aller plus loin, la Masterclass du 30 octobre
             t'accompagnera à transformer cet épuisement silencieux en clarté
             durable —{" "}
@@ -986,7 +986,6 @@ const IntroductionPage = () => {
             color: "#1c3b5a",
             textAlign: "center",
             fontStyle: "italic",
-            marginBottom: 20,
           }}
         >
           Parce que tu mérites de te sentir{" "}
@@ -995,7 +994,7 @@ const IntroductionPage = () => {
         </Text>
 
         {/* Signature */}
-        <View style={{ marginTop: 25, alignItems: "center" }}>
+        <View style={{ marginTop: 20, alignItems: "center" }}>
           <Text style={styles.introSignature}>Ayoub Sadry</Text>
           <Text style={styles.introRole}>Fondateur de NIIA Coaching</Text>
         </View>
@@ -1130,8 +1129,8 @@ const DiagnosticOverviewPage = ({
           {/* Container for wheel */}
           <View
             style={{
-              width: 240,
-              height: 240,
+              width: 260,
+              height: 260,
               position: "relative",
               alignItems: "center",
               justifyContent: "center",
@@ -1172,7 +1171,7 @@ const DiagnosticOverviewPage = ({
             <View
               style={{ width: "100%", height: "100%", position: "relative" }}
             >
-              {results.scores.map((score) => {
+              {results.scores.map((score, index) => {
                 const info = batteryInfo[score.battery];
                 const color =
                   score.level === "optimal"
@@ -1183,9 +1182,9 @@ const DiagnosticOverviewPage = ({
                 const segments = Math.ceil((score.score / 30) * 4);
 
                 // Calculate positions using proper angles (360°/7 = 51.428571°)
-                const centerX = 120;
-                const centerY = 120;
-                const batteryRadius = 90; // Distance from center to batteries
+                const centerX = 130;
+                const centerY = 130;
+                const batteryRadius = 100; // Distance from center to batteries (increased for more space)
                 const niaRadius = 22.5; // NIIA circle radius (45/2)
                 const spokeLength = batteryRadius - niaRadius - 8; // Spoke from NIIA edge to near battery edge
 
@@ -1199,6 +1198,17 @@ const DiagnosticOverviewPage = ({
                   relational: 257.14, // Left
                   spiritual: 308.57, // Top-left
                 };
+
+                // Get color from previous battery (shift one step counterclockwise)
+                const prevIndex =
+                  index === 0 ? results.scores.length - 1 : index - 1;
+                const prevScore = results.scores[prevIndex];
+                const spokeColor =
+                  prevScore.level === "optimal"
+                    ? "#2E7D7A"
+                    : prevScore.level === "unstable"
+                    ? "#E3A33A"
+                    : "#D85E36";
 
                 const angle = angles[score.battery];
                 const angleRad = (angle * Math.PI) / 180;
@@ -1221,7 +1231,7 @@ const DiagnosticOverviewPage = ({
                         top: spokeStartY,
                         width: spokeLength,
                         height: 3,
-                        backgroundColor: color,
+                        backgroundColor: spokeColor,
                         transformOrigin: "0 50%",
                         transform: `rotate(${angle}deg)`,
                         zIndex: 5,
