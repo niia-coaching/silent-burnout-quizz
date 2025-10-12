@@ -7,6 +7,10 @@ import {
   pdf,
   Image,
   Link,
+  Svg,
+  Path,
+  Circle,
+  Rect,
 } from "@react-pdf/renderer";
 import { AssessmentResults, BatteryScore } from "../types";
 import { batteryInfo, getLevelLabel } from "../data/batteries";
@@ -825,49 +829,147 @@ const BatteryDetailPage = ({
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerBold}>NIIA Coaching</Text>
+          <Text style={{ ...styles.footerBold, marginBottom: 6, marginTop: 6 }}>
+            NIIA Coaching
+          </Text>
+
           <View
             style={{
               flexDirection: "row",
+              alignItems: "center",
               justifyContent: "center",
               flexWrap: "wrap",
+              gap: 8,
             }}
           >
             <Link
               src="https://www.niia.coach/masterclass-gratuite"
               style={{ textDecoration: "none" }}
             >
-              <Text style={styles.footerText}>www.niia.coach</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  style={{ marginRight: 3 }}
+                >
+                  <Circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                  />
+                  <Path
+                    d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                  />
+                </Svg>
+                <Text style={styles.footerText}>www.niia.coach</Text>
+              </View>
             </Link>
-            <Text style={styles.footerText}> • </Text>
             <Link
               src="mailto:contact@niia.coach"
               style={{ textDecoration: "none" }}
             >
-              <Text style={styles.footerText}>contact@niia.coach</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  style={{ marginRight: 3 }}
+                >
+                  <Rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="14"
+                    rx="3"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                  />
+                  <Path
+                    d="M3 7l9 6 9-6"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </Svg>
+                <Text style={styles.footerText}>contact@niia.coach</Text>
+              </View>
             </Link>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
+
             <Link
               src="https://instagram.com/ayoub.sadry"
               style={{ textDecoration: "none" }}
             >
-              <Text style={styles.footerText}>@ayoub.sadry</Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  style={{ marginRight: 3 }}
+                >
+                  <Rect
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="6"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                  />
+                  <Circle
+                    cx="12"
+                    cy="12"
+                    r="4"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                  />
+                  <Circle cx="18" cy="6" r="1.5" fill="#7e8081" />
+                </Svg>
+                <Text style={styles.footerText}>@ayoub.sadry</Text>
+              </View>
             </Link>
-            <Text style={styles.footerText}> • </Text>
             <Link
               src="https://fr.linkedin.com/in/ayoub-sadry"
               style={{ textDecoration: "none" }}
             >
-              <Text style={styles.footerText}>
-                fr.linkedin.com/in/ayoub-sadry
-              </Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  style={{ marginRight: 3 }}
+                >
+                  <Rect
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="4"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                  />
+                  <Path
+                    d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"
+                    fill="none"
+                    stroke="#7e8081"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                </Svg>
+                <Text style={styles.footerText}>ayoub-sadry</Text>
+              </View>
             </Link>
           </View>
         </View>
@@ -1735,56 +1837,185 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                 fontSize: 8,
                 color: "#7e8081",
                 textAlign: "center",
-                marginBottom: 2,
+                marginBottom: 5,
               }}
             >
               Neural Intelligence & Inner Authority — Renaissance Souveraine™
             </Text>
+
             <View
               style={{
                 flexDirection: "row",
+                alignItems: "center",
                 justifyContent: "center",
                 flexWrap: "wrap",
-                marginBottom: 1,
+                gap: 6,
               }}
             >
+              <Link
+                src="https://www.niia.coach/masterclass-gratuite"
+                style={{ textDecoration: "none" }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    style={{ marginRight: 3 }}
+                  >
+                    <Circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                    />
+                    <Path
+                      d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                    />
+                  </Svg>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      color: "#7e8081",
+                      textAlign: "center",
+                    }}
+                  >
+                    www.niia.coach
+                  </Text>
+                </View>
+              </Link>
+
               <Link
                 src="mailto:contact@niia.coach"
                 style={{ textDecoration: "none" }}
               >
-                <Text
-                  style={{ fontSize: 8, color: "#7e8081", textAlign: "center" }}
-                >
-                  contact@niia.coach
-                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    style={{ marginRight: 3 }}
+                  >
+                    <Rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="14"
+                      rx="3"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                    />
+                    <Path
+                      d="M3 7l9 6 9-6"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </Svg>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      color: "#7e8081",
+                      textAlign: "center",
+                    }}
+                  >
+                    contact@niia.coach
+                  </Text>
+                </View>
               </Link>
-              <Text
-                style={{ fontSize: 8, color: "#7e8081", textAlign: "center" }}
-              >
-                {" "}
-                •{" "}
-              </Text>
+
               <Link
                 src="https://instagram.com/ayoub.sadry"
                 style={{ textDecoration: "none" }}
               >
-                <Text
-                  style={{ fontSize: 8, color: "#7e8081", textAlign: "center" }}
-                >
-                  @ayoub.sadry
-                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    style={{ marginRight: 3 }}
+                  >
+                    <Rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="6"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                    />
+                    <Circle
+                      cx="12"
+                      cy="12"
+                      r="4"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                    />
+                    <Circle cx="18" cy="6" r="1.5" fill="#7e8081" />
+                  </Svg>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      color: "#7e8081",
+                      textAlign: "center",
+                    }}
+                  >
+                    @ayoub.sadry
+                  </Text>
+                </View>
+              </Link>
+
+              <Link
+                src="https://fr.linkedin.com/in/ayoub-sadry"
+                style={{ textDecoration: "none" }}
+              >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 24 24"
+                    style={{ marginRight: 3 }}
+                  >
+                    <Rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="4"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                    />
+                    <Path
+                      d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"
+                      fill="none"
+                      stroke="#7e8081"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                  </Svg>
+                  <Text
+                    style={{
+                      fontSize: 8,
+                      color: "#7e8081",
+                      textAlign: "center",
+                    }}
+                  >
+                    ayoub-sadry
+                  </Text>
+                </View>
               </Link>
             </View>
-            <Link
-              src="https://fr.linkedin.com/in/ayoub-sadry"
-              style={{ textDecoration: "none" }}
-            >
-              <Text
-                style={{ fontSize: 8, color: "#7e8081", textAlign: "center" }}
-              >
-                fr.linkedin.com/in/ayoub-sadry
-              </Text>
-            </Link>
           </View>
         </View>
       </Page>
