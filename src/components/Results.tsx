@@ -23,7 +23,8 @@ const Results = ({ results, onRestart }: Props) => {
   const unstableBatteries = results.scores.filter(s => s.level === 'unstable');
   const optimalBatteries = results.scores.filter(s => s.level === 'optimal');
 
-  const priorities = [...criticalBatteries, ...unstableBatteries]
+  // Get 3 batteries with lowest scores, regardless of level (critical, unstable, or optimal)
+  const priorities = [...results.scores]
     .sort((a, b) => a.score - b.score)
     .slice(0, 3);
 
