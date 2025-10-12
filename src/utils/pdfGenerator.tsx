@@ -1,6 +1,6 @@
-import { Document, Page, Text, View, StyleSheet, pdf, Font } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, pdf } from '@react-pdf/renderer';
 import { AssessmentResults, BatteryScore } from '../types';
-import { batteryInfo, getLevelLabel, getLevelColor } from '../data/batteries';
+import { batteryInfo, getLevelLabel } from '../data/batteries';
 import pdfContentData from '../data/pdfContent.json';
 
 // Map English keys to French names for content lookup
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 5,
     marginBottom: 5,
-    display: 'inline-block',
   },
   sectionBody: {
     fontSize: 9,
@@ -454,15 +453,12 @@ const BatteryDetailPage = ({ batteryScore }: { batteryScore: BatteryScore }) => 
           <View style={[styles.sidebar, { backgroundColor: lightBg }]}>
             <Text style={[styles.stateLabel, { color: accentColor }]}>{levelLabel.toUpperCase()}</Text>
             <View style={styles.battery}>
-              {[3, 2, 1].map((seg) => (
-                <View 
-                  key={seg}
-                  style={[
-                    styles.batterySegment,
-                    seg <= filledSegments && { backgroundColor: accentColor }
-                  ]} 
-                />
-              ))}
+              {[3, 2, 1].map((seg) => {
+                const segmentStyle = seg <= filledSegments 
+                  ? { ...styles.batterySegment, backgroundColor: accentColor }
+                  : styles.batterySegment;
+                return <View key={seg} style={segmentStyle} />;
+              })}
             </View>
             <Text style={{ fontSize: 8, marginTop: 8, textAlign: 'center', color: '#1c3b5a' }}>
               {batteryScore.score}/30
@@ -493,7 +489,7 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
               Diagnostic des 7 Batteries
             </Text>
             <Text style={{ fontSize: 14, color: '#1c3b5a', marginBottom: 30, textAlign: 'center' }}>
-              {results.firstName} {results.lastName}, voici ton analyse complète
+              {results.firstName}, voici ton analyse complète
             </Text>
           </View>
           

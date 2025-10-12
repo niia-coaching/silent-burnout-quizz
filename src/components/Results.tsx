@@ -1,6 +1,6 @@
 import { Download, RotateCcw, AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 import { AssessmentResults } from '../types';
-import { batteryInfo, getLevelEmoji, getLevelLabel, getLevelColor } from '../data/batteries';
+import { batteryInfo, getLevelLabel } from '../data/batteries';
 import { generatePDF } from '../utils/pdfGenerator';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
@@ -54,7 +54,7 @@ const Results = ({ results, onRestart }: Props) => {
             Ton Diagnostic Est Prêt !
           </h1>
           <p className="text-xl text-niia-gray">
-            {results.firstName} {results.lastName}, voici l'état de tes 7 batteries de vie
+            {results.firstName}, voici l'état de tes 7 batteries de vie
           </p>
         </div>
 

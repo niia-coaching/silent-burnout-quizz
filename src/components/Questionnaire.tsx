@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
 import { questions, getAllBatteries, getBatteryQuestions } from '../data/questions';
 import { batteryInfo } from '../data/batteries';
-import { calculateResults, calculateBatteryScore } from '../utils/scoring';
+import { calculateResults } from '../utils/scoring';
 import { AssessmentResults, BatteryType } from '../types';
 import { saveToGoogleSheets } from '../utils/googleSheets';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
-import { Progress } from './ui/progress';
 import { BatteryIcon } from './BatteryIcons';
 import Header from './Header';
 
@@ -97,7 +96,7 @@ const Questionnaire = ({ onComplete }: Props) => {
     } else if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion(prev => prev + 1);
     } else {
-      const results = calculateResults(firstName, lastName, email, phone, answers);
+      const results = calculateResults(firstName, answers);
       onComplete(results);
     }
   };
@@ -259,7 +258,6 @@ const Questionnaire = ({ onComplete }: Props) => {
   // Battery Validation Screen
   if (showBatteryValidation && completedBattery) {
     const batteryData = batteryInfo[completedBattery];
-    const batteryScore = calculateBatteryScore(completedBattery, answers);
     const completedCount = getAllBatteries().indexOf(completedBattery) + 1;
     const totalBatteries = getAllBatteries().length;
 

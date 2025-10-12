@@ -19,9 +19,6 @@ export const calculateBatteryScore = (
 
 export const calculateResults = (
   firstName: string,
-  lastName: string,
-  email: string,
-  phone: string,
   answers: Record<string, number>
 ): AssessmentResults => {
   const batteries = getAllBatteries();
@@ -35,15 +32,10 @@ export const calculateResults = (
   
   return {
     firstName,
-    lastName,
-    email,
-    phone,
-    answers,
     scores,
     totalScore,
     totalPercentage,
-    profile,
-    timestamp: new Date().toISOString()
+    profile
   };
 };
 
