@@ -858,13 +858,13 @@ const BatteryDetailPage = ({
                     cy="12"
                     r="10"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#1c3b5a"
                     strokeWidth="1.5"
                   />
                   <Path
                     d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#1c3b5a"
                     strokeWidth="1.5"
                   />
                 </Svg>
@@ -889,13 +889,13 @@ const BatteryDetailPage = ({
                     height="14"
                     rx="3"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#d96536"
                     strokeWidth="1.5"
                   />
                   <Path
                     d="M3 7l9 6 9-6"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#d96536"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -923,7 +923,7 @@ const BatteryDetailPage = ({
                     height="20"
                     rx="6"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#E4405F"
                     strokeWidth="1.5"
                   />
                   <Circle
@@ -931,10 +931,10 @@ const BatteryDetailPage = ({
                     cy="12"
                     r="4"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#E4405F"
                     strokeWidth="1.5"
                   />
-                  <Circle cx="18" cy="6" r="1.5" fill="#7e8081" />
+                  <Circle cx="18" cy="6" r="1.5" fill="#E4405F" />
                 </Svg>
                 <Text style={styles.footerText}>@ayoub.sadry</Text>
               </View>
@@ -957,13 +957,13 @@ const BatteryDetailPage = ({
                     height="20"
                     rx="4"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#0077B5"
                     strokeWidth="1.5"
                   />
                   <Path
                     d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"
                     fill="none"
-                    stroke="#7e8081"
+                    stroke="#0077B5"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                   />
@@ -1868,13 +1868,13 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                       cy="12"
                       r="10"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#1c3b5a"
                       strokeWidth="1.5"
                     />
                     <Path
                       d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#1c3b5a"
                       strokeWidth="1.5"
                     />
                   </Svg>
@@ -1908,13 +1908,13 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                       height="14"
                       rx="3"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#d96536"
                       strokeWidth="1.5"
                     />
                     <Path
                       d="M3 7l9 6 9-6"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#d96536"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -1950,7 +1950,7 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                       height="20"
                       rx="6"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#E4405F"
                       strokeWidth="1.5"
                     />
                     <Circle
@@ -1958,10 +1958,10 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                       cy="12"
                       r="4"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#E4405F"
                       strokeWidth="1.5"
                     />
-                    <Circle cx="18" cy="6" r="1.5" fill="#7e8081" />
+                    <Circle cx="18" cy="6" r="1.5" fill="#E4405F" />
                   </Svg>
                   <Text
                     style={{
@@ -1993,13 +1993,13 @@ const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                       height="20"
                       rx="4"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#0077B5"
                       strokeWidth="1.5"
                     />
                     <Path
                       d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"
                       fill="none"
-                      stroke="#7e8081"
+                      stroke="#0077B5"
                       strokeWidth="1.5"
                       strokeLinecap="round"
                     />

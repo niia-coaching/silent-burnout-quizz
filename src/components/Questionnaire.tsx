@@ -106,23 +106,6 @@ const Questionnaire = ({ onComplete }: Props) => {
     }
   };
 
-  const handleTestPDF = () => {
-    // Fill with test data
-    setFirstName("Test");
-    setLastName("User");
-    setEmail("test@example.com");
-    setPhone("+33612345678");
-
-    // Generate random answers (1-5) for all questions
-    const randomAnswers: Record<string, number> = {};
-    questions.forEach((question) => {
-      randomAnswers[question.id] = Math.floor(Math.random() * 5) + 1; // Random between 1 and 5
-    });
-
-    // Calculate results and complete
-    const results = calculateResults("Test", randomAnswers);
-    onComplete(results);
-  };
 
   const handleAnswer = (points: number) => {
     const question = questions[currentQuestion];
@@ -313,15 +296,6 @@ const Questionnaire = ({ onComplete }: Props) => {
                   )}
                 </Button>
 
-                {/* Test Button - For Development Only */}
-                <Button
-                  onClick={handleTestPDF}
-                  variant="outline"
-                  className="w-full border-amber-500 text-amber-700 hover:bg-amber-50"
-                  size="lg"
-                >
-                  🧪 Test PDF (Random Answers)
-                </Button>
               </div>
 
               <p className="text-sm text-center text-muted-foreground">
