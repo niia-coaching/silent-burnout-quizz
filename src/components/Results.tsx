@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Download, RotateCcw, AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 import { AssessmentResults } from '../types';
 import { batteryInfo, getLevelLabel } from '../data/batteries';
-import { generatePDF } from '../utils/pdfGenerator';
+import { PDFDocument } from '../utils/pdfGenerator';
+import { pdf } from '@react-pdf/renderer';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Badge } from './ui/badge';
@@ -15,8 +17,17 @@ interface Props {
 }
 
 const Results = ({ results, onRestart }: Props) => {
-  const handleDownloadPDF = () => {
-    generatePDF(results);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+
+  const handleDownloadPDF = async () => {
+    try {
+      const blob = await pdf(<PDFDocument results={results} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      setPdfUrl(url);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Erreur lors de la generation du PDF. Veuillez reessayer.");
+    }
   };
 
   const criticalBatteries = results.scores.filter(s => s.level === 'critical');
@@ -249,14 +260,27 @@ const Results = ({ results, onRestart }: Props) => {
                   <span>Ton plan d'action complet</span>
                 </li>
               </ul>
-              <Button 
-                onClick={handleDownloadPDF} 
-                className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
-                size="lg"
-              >
-                <Download className="mr-2" size={20} />
-                Télécharger Mon Bilan PDF
-              </Button>
+              {pdfUrl ? (
+                <a
+                  href={pdfUrl}
+                  download={`diagnostic-7-batteries-${results.firstName.toLowerCase()}.pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold h-11 rounded-md px-8 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <Download className="mr-2" size={20} />
+                  Télécharger Mon Bilan PDF
+                </a>
+              ) : (
+                <Button 
+                  onClick={handleDownloadPDF} 
+                  className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
+                  size="lg"
+                >
+                  <Download className="mr-2" size={20} />
+                  Générer Mon Bilan PDF
+                </Button>
+              )}
             </CardContent>
           </Card>
 
