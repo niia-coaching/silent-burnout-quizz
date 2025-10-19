@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Download, RotateCcw, AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react';
 import { AssessmentResults } from '../types';
 import { batteryInfo, getLevelLabel } from '../data/batteries';
@@ -17,13 +16,76 @@ interface Props {
 }
 
 const Results = ({ results, onRestart }: Props) => {
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  // Detect if running in Instagram's embedded browser
+  const isInstagramBrowser = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return userAgent.includes('instagram') || 
+           userAgent.includes('fbav') || 
+           userAgent.includes('fban') ||
+           window.location.hostname.includes('instagram') ||
+           document.referrer.includes('instagram');
+  };
 
   const handleDownloadPDF = async () => {
     try {
       const blob = await pdf(<PDFDocument results={results} />).toBlob();
       const url = URL.createObjectURL(blob);
-      setPdfUrl(url);
+      const downloadFileName = `diagnostic-7-batteries-${results.firstName.toLowerCase()}.pdf`;
+      
+      // If in Instagram browser, show instructions to open in external browser
+      if (isInstagramBrowser()) {
+        // Try to open in external browser first
+        try {
+          const externalUrl = `https://www.niia.coach/download-pdf?data=${encodeURIComponent(JSON.stringify(results))}`;
+          window.open(externalUrl, '_blank');
+          
+          // Show instruction message
+          alert(`Pour télécharger ton PDF, ouvre ce lien dans ton navigateur externe (Safari/Chrome) :\n\n${window.location.href}\n\nOu clique sur "Ouvrir dans le navigateur" dans le menu Instagram.`);
+          return;
+        } catch (e) {
+          console.log('Failed to open external URL');
+        }
+      }
+      
+      // For regular browsers, try multiple approaches
+      // Method 1: Try to open in new tab with PDF viewer
+      try {
+        const newWindow = window.open(url, '_blank');
+        if (newWindow) {
+          // If new window opened successfully, try to trigger download
+          setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = downloadFileName;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }, 100);
+          return;
+        }
+      } catch (e) {
+        console.log('New window blocked, trying alternative method');
+      }
+      
+      // Method 2: Direct download with link click
+      try {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = downloadFileName;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (e) {
+        console.log('Direct download failed, trying redirect');
+      }
+      
+      // Method 3: Redirect to PDF URL (last resort)
+      setTimeout(() => {
+        window.location.href = url;
+      }, 500);
+      
     } catch (error) {
       console.error("Error generating PDF:", error);
       alert("Erreur lors de la generation du PDF. Veuillez reessayer.");
@@ -260,26 +322,18 @@ const Results = ({ results, onRestart }: Props) => {
                   <span>Ton plan d'action complet</span>
                 </li>
               </ul>
-              {pdfUrl ? (
-                <a
-                  href={pdfUrl}
-                  download={`diagnostic-7-batteries-${results.firstName.toLowerCase()}.pdf`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold h-11 rounded-md px-8 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                >
-                  <Download className="mr-2" size={20} />
-                  Télécharger Mon Bilan PDF
-                </a>
-              ) : (
-                <Button 
-                  onClick={handleDownloadPDF} 
-                  className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
-                  size="lg"
-                >
-                  <Download className="mr-2" size={20} />
-                  Générer Mon Bilan PDF
-                </Button>
+              <Button 
+                onClick={handleDownloadPDF} 
+                className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
+                size="lg"
+              >
+                <Download className="mr-2" size={20} />
+                {isInstagramBrowser() ? 'Ouvrir dans le Navigateur' : 'Télécharger Mon Bilan PDF'}
+              </Button>
+              {isInstagramBrowser() && (
+                <p className="text-xs text-center text-muted-foreground mt-2">
+                  💡 Clique sur "Ouvrir dans le navigateur" dans le menu Instagram pour télécharger ton PDF
+                </p>
               )}
             </CardContent>
           </Card>
