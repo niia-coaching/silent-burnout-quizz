@@ -2031,6 +2031,7 @@ export const generatePDF = async (results: AssessmentResults) => {
     const link = document.createElement("a");
     link.href = url;
     link.download = `diagnostic-7-batteries-${results.firstName.toLowerCase()}.pdf`;
+    link.target = "_blank";
     link.click();
     URL.revokeObjectURL(url);
   } catch (error) {
