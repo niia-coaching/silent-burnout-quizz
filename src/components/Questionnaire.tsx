@@ -42,6 +42,16 @@ const Questionnaire = ({ onComplete }: Props) => {
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Detect if running in Instagram's embedded browser
+  const isInstagramBrowser = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return userAgent.includes('instagram') || 
+           userAgent.includes('fbav') || 
+           userAgent.includes('fban') ||
+           window.location.hostname.includes('instagram') ||
+           document.referrer.includes('instagram');
+  };
+
   const totalQuestions = questions.length;
   const progress =
     currentQuestion >= 0 ? ((currentQuestion + 1) / totalQuestions) * 100 : 0;
@@ -82,6 +92,19 @@ const Questionnaire = ({ onComplete }: Props) => {
 
   const handleStart = async () => {
     if (firstName.trim() && lastName.trim() && email.trim()) {
+      // If in Instagram browser, redirect to external browser
+      if (isInstagramBrowser()) {
+        alert(`Pour une meilleure expérience, ouvre ce lien dans ton navigateur externe (Safari/Chrome) :\n\n${window.location.href}\n\nOu clique sur "Ouvrir dans le navigateur" dans le menu Instagram.`);
+        
+        // Try to open in external browser
+        try {
+          window.open(window.location.href, '_blank');
+        } catch (e) {
+          console.log('Failed to open external browser');
+        }
+        return;
+      }
+
       setIsSubmitting(true);
 
       try {
@@ -290,7 +313,7 @@ const Questionnaire = ({ onComplete }: Props) => {
                     </>
                   ) : (
                     <>
-                      Commencer l'évaluation
+                      {isInstagramBrowser() ? 'Ouvrir dans le Navigateur' : 'Commencer l\'évaluation'}
                       <ChevronRight className="ml-2" size={20} />
                     </>
                   )}
@@ -301,6 +324,11 @@ const Questionnaire = ({ onComplete }: Props) => {
               <p className="text-sm text-center text-muted-foreground">
                 35 questions • 3 minutes • 100% confidentiel
               </p>
+              {isInstagramBrowser() && (
+                <p className="text-xs text-center text-amber-600 mt-2">
+                  💡 Pour une meilleure expérience, ouvre ce lien dans ton navigateur externe
+                </p>
+              )}
             </CardContent>
           </Card>
         </div>
