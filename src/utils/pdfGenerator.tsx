@@ -1591,7 +1591,7 @@ const DiagnosticOverviewPage = ({
 };
 
 // Main PDF Document
-const PDFDocument = ({ results }: { results: AssessmentResults }) => {
+export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
   // Get the 3 lowest batteries for highlighting
   const lowestBatteries = [...results.scores]
     .sort((a, b) => a.score - b.score)
