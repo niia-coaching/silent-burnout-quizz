@@ -4,11 +4,12 @@ import {
   questions,
   getAllBatteries,
   getBatteryQuestions,
+  getAllRandomizedQuestions,
 } from "../data/questions";
 import { batteryInfo } from "../data/batteries";
 import { calculateResults } from "../utils/scoring";
 import { AssessmentResults, BatteryType } from "../types";
-import { saveToGoogleSheets } from "../utils/googleSheets";
+import { saveAssessmentResults, AssessmentData } from "../utils/googleSheets";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -41,6 +42,9 @@ const Questionnaire = ({ onComplete }: Props) => {
     null
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [randomizedQuestions, setRandomizedQuestions] = useState<typeof questions>([]);
+  const [resultsSaved, setResultsSaved] = useState(false);
+  const [isGeneratingResults, setIsGeneratingResults] = useState(false);
 
   // Detect if running in Instagram's embedded browser
   const isInstagramBrowser = () => {
@@ -52,7 +56,7 @@ const Questionnaire = ({ onComplete }: Props) => {
            document.referrer.includes('instagram');
   };
 
-  const totalQuestions = questions.length;
+  const totalQuestions = randomizedQuestions.length || questions.length;
   const progress =
     currentQuestion >= 0 ? ((currentQuestion + 1) / totalQuestions) * 100 : 0;
 
@@ -78,8 +82,8 @@ const Questionnaire = ({ onComplete }: Props) => {
   };
 
   useEffect(() => {
-    if (currentQuestion >= 0 && currentQuestion < questions.length) {
-      const newBattery = questions[currentQuestion].battery;
+    if (currentQuestion >= 0 && currentQuestion < randomizedQuestions.length) {
+      const newBattery = randomizedQuestions[currentQuestion].battery;
 
       if (currentBattery && newBattery !== currentBattery) {
         setCompletedBattery(currentBattery);
@@ -88,7 +92,7 @@ const Questionnaire = ({ onComplete }: Props) => {
 
       setCurrentBattery(newBattery);
     }
-  }, [currentQuestion, currentBattery]);
+  }, [currentQuestion, currentBattery, randomizedQuestions]);
 
   const handleStart = async () => {
     if (firstName.trim() && lastName.trim() && email.trim()) {
@@ -108,20 +112,17 @@ const Questionnaire = ({ onComplete }: Props) => {
       setIsSubmitting(true);
 
       try {
-        // Save user data to Google Sheets
-        await saveToGoogleSheets({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          email: email.trim(),
-          phone: phone.trim() || "Non renseigné",
-          timestamp: new Date().toISOString(),
-        });
+        // Generate randomized questions
+        const randomized = getAllRandomizedQuestions();
+        setRandomizedQuestions(randomized);
 
-        // Start the questionnaire
+        // Start the questionnaire (no initial data saving)
         setCurrentQuestion(0);
       } catch (error) {
-        console.error("Error submitting data:", error);
-        // Still proceed to questionnaire even if saving failed
+        console.error("Error starting questionnaire:", error);
+        // Still proceed to questionnaire even if randomization failed
+        const randomized = getAllRandomizedQuestions();
+        setRandomizedQuestions(randomized);
         setCurrentQuestion(0);
       } finally {
         setIsSubmitting(false);
@@ -131,19 +132,128 @@ const Questionnaire = ({ onComplete }: Props) => {
 
 
   const handleAnswer = (points: number) => {
-    const question = questions[currentQuestion];
+    const question = randomizedQuestions[currentQuestion];
     setAnswers((prev) => ({ ...prev, [question.id]: points }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (showBatteryValidation) {
       setShowBatteryValidation(false);
       setCompletedBattery(null);
     } else if (currentQuestion < totalQuestions - 1) {
       setCurrentQuestion((prev) => prev + 1);
     } else {
-      const results = calculateResults(firstName, answers);
-      onComplete(results);
+      setIsGeneratingResults(true);
+      
+      try {
+        const results = calculateResults(firstName, answers);
+        
+        // Save assessment results to Google Sheets only once
+        if (!resultsSaved) {
+          setResultsSaved(true);
+        try {
+          // Create comprehensive results object
+            const createResultsObject = () => {
+              // Format answers organized by battery
+              const answersByBattery: Record<string, Record<string, string>> = {};
+              
+              // Initialize battery sections
+              const batteries = ['physical', 'mental', 'emotional', 'identity', 'relational', 'professional', 'spiritual'];
+              batteries.forEach(battery => {
+                answersByBattery[battery] = {};
+              });
+              
+              Object.entries(answers).forEach(([questionId, points]) => {
+                // Find the question in randomized questions
+                const question = randomizedQuestions.find(q => q.id === questionId);
+                if (question) {
+                  // Find the selected option
+                  const selectedOption = question.options.find(option => option.points === points);
+                  if (selectedOption) {
+                    answersByBattery[question.battery][question.text] = selectedOption.text;
+                  }
+                }
+              });
+
+              // Create comprehensive results object
+              const resultsObject = {
+                // Overall assessment
+                overall: {
+                  totalScore: results.totalScore,
+                  totalPercentage: results.totalPercentage,
+                  profile: results.profile
+                },
+                // Individual batteries with scores, levels, and answers
+                batteries: {
+                  physical: {
+                    score: results.scores.find(s => s.battery === 'physical')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'physical')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'physical')?.percentage || 0,
+                    answers: answersByBattery.physical
+                  },
+                  mental: {
+                    score: results.scores.find(s => s.battery === 'mental')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'mental')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'mental')?.percentage || 0,
+                    answers: answersByBattery.mental
+                  },
+                  emotional: {
+                    score: results.scores.find(s => s.battery === 'emotional')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'emotional')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'emotional')?.percentage || 0,
+                    answers: answersByBattery.emotional
+                  },
+                  identity: {
+                    score: results.scores.find(s => s.battery === 'identity')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'identity')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'identity')?.percentage || 0,
+                    answers: answersByBattery.identity
+                  },
+                  relational: {
+                    score: results.scores.find(s => s.battery === 'relational')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'relational')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'relational')?.percentage || 0,
+                    answers: answersByBattery.relational
+                  },
+                  professional: {
+                    score: results.scores.find(s => s.battery === 'professional')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'professional')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'professional')?.percentage || 0,
+                    answers: answersByBattery.professional
+                  },
+                  spiritual: {
+                    score: results.scores.find(s => s.battery === 'spiritual')?.score || 0,
+                    level: results.scores.find(s => s.battery === 'spiritual')?.level || 'critical',
+                    percentage: results.scores.find(s => s.battery === 'spiritual')?.percentage || 0,
+                    answers: answersByBattery.spiritual
+                  }
+                }
+              };
+
+              return JSON.stringify(resultsObject, null, 2);
+            };
+
+            const assessmentData: AssessmentData = {
+              firstName: firstName.trim(),
+              lastName: lastName.trim(),
+              email: email.trim(),
+              phone: phone.trim() || "Non renseigné",
+              timestamp: new Date().toISOString(),
+              results: createResultsObject()
+            };
+
+            await saveAssessmentResults(assessmentData);
+            console.log('Assessment results saved successfully');
+          } catch (error) {
+            console.error('Error saving assessment results:', error);
+            // Continue even if saving fails
+          }
+        }
+        
+        onComplete(results);
+      } finally {
+        setIsGeneratingResults(false);
+      }
     }
   };
 
@@ -163,7 +273,7 @@ const Questionnaire = ({ onComplete }: Props) => {
 
   const isAnswered =
     currentQuestion >= 0 &&
-    answers[questions[currentQuestion]?.id] !== undefined;
+    answers[randomizedQuestions[currentQuestion]?.id] !== undefined;
 
   // Intro screen
   if (currentQuestion === -1) {
@@ -418,15 +528,27 @@ const Questionnaire = ({ onComplete }: Props) => {
   }
 
   // Question screen
-  const question = questions[currentQuestion];
+  const question = randomizedQuestions[currentQuestion];
   const batteryColor = currentBattery
     ? batteryInfo[currentBattery].color
     : "#666";
   const batteryQuestions = currentBattery
     ? getBatteryQuestions(currentBattery)
     : [];
-  const currentBatteryQuestionIndex =
-    batteryQuestions.findIndex((q) => q.id === question.id) + 1;
+  
+  // Calculate the current question index within the battery (1-based, incremental)
+  const currentBatteryQuestionIndex = (() => {
+    if (!currentBattery || !question) return 1;
+    
+    // Count how many questions of this battery we've already seen
+    let count = 0;
+    for (let i = 0; i <= currentQuestion; i++) {
+      if (randomizedQuestions[i]?.battery === currentBattery) {
+        count++;
+      }
+    }
+    return count;
+  })();
 
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-niia-beige-light via-white to-niia-beige">
@@ -517,7 +639,7 @@ const Questionnaire = ({ onComplete }: Props) => {
 
             <Button
               onClick={handleNext}
-              disabled={!isAnswered}
+              disabled={!isAnswered || isGeneratingResults}
               size="default"
               className={`flex-1 font-semibold ${
                 isAnswered
@@ -525,10 +647,41 @@ const Questionnaire = ({ onComplete }: Props) => {
                   : ""
               }`}
             >
-              {currentQuestion === totalQuestions - 1
-                ? "Voir mes résultats"
-                : "Suivant"}
-              <ChevronRight className="ml-2" size={18} />
+              {isGeneratingResults ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Génération...
+                </>
+              ) : currentQuestion === totalQuestions - 1 ? (
+                <>
+                  Voir mes résultats
+                  <ChevronRight className="ml-2" size={18} />
+                </>
+              ) : (
+                <>
+                  Suivant
+                  <ChevronRight className="ml-2" size={18} />
+                </>
+              )}
             </Button>
           </div>
         </div>

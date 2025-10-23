@@ -405,6 +405,39 @@ export const getBatteryQuestions = (battery: BatteryType): Question[] => {
   return questions.filter(q => q.battery === battery);
 };
 
+// Function to shuffle array (Fisher-Yates algorithm)
+const shuffleArray = <T>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+export const getRandomizedBatteryQuestions = (battery: BatteryType): Question[] => {
+  const batteryQuestions = questions.filter(q => q.battery === battery);
+  return shuffleArray(batteryQuestions);
+};
+
+export const getAllRandomizedQuestions = (): Question[] => {
+  const allBatteries = getAllBatteries();
+  const randomizedQuestions: Question[] = [];
+  
+  // Get randomized questions for each battery
+  allBatteries.forEach(battery => {
+    const batteryQuestions = getRandomizedBatteryQuestions(battery);
+    // Also randomize the options within each question
+    const questionsWithRandomizedOptions = batteryQuestions.map(question => ({
+      ...question,
+      options: shuffleArray(question.options)
+    }));
+    randomizedQuestions.push(...questionsWithRandomizedOptions);
+  });
+  
+  return randomizedQuestions;
+};
+
 export const getAllBatteries = (): BatteryType[] => {
   return ['physical', 'mental', 'emotional', 'identity', 'relational', 'professional', 'spiritual'];
 };

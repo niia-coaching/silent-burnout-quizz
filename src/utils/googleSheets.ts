@@ -21,6 +21,11 @@ export interface UserData {
   timestamp: string;
 }
 
+export interface AssessmentData extends UserData {
+  // Consolidated results in a single column
+  results: string; // JSON string containing all assessment data
+}
+
 export const saveToGoogleSheets = async (userData: UserData): Promise<boolean> => {
   try {
     // Add timestamp if not provided
@@ -60,6 +65,49 @@ export const saveToGoogleSheets = async (userData: UserData): Promise<boolean> =
     }
   } catch (error) {
     console.error('Error saving to Google Sheets:', error);
+    return false;
+  }
+};
+
+export const saveAssessmentResults = async (assessmentData: AssessmentData): Promise<boolean> => {
+  try {
+    // Add timestamp if not provided
+    const dataToSubmit = {
+      ...assessmentData,
+      timestamp: assessmentData.timestamp || new Date().toISOString(),
+      date: new Date().toLocaleString('fr-FR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+
+    // Use URLSearchParams for Google Apps Script (avoids CORS preflight)
+    const formData = new URLSearchParams();
+    Object.entries(dataToSubmit).forEach(([key, value]) => {
+      formData.append(key, String(value));
+    });
+
+    const response = await fetch(GOOGLE_SHEETS_URL, {
+      method: 'POST',
+      body: formData,
+      // Don't set Content-Type - let browser set it automatically for URLSearchParams
+    });
+
+    const result = await response.text();
+    console.log('Assessment results saved to Google Sheets:', result);
+
+    if (response.ok) {
+      console.log('Assessment results saved to Google Sheets successfully');
+      return true;
+    } else {
+      console.error('Failed to save assessment results to Google Sheets:', response.statusText);
+      return false;
+    }
+  } catch (error) {
+    console.error('Error saving assessment results to Google Sheets:', error);
     return false;
   }
 };

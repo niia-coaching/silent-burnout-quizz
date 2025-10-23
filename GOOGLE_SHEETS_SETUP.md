@@ -17,7 +17,7 @@ This is the **working method** that avoids CORS errors!
 3. Add these column headers in **row 1**:
 
 ```
-firstName | lastName | email | phone | timestamp | date
+firstName | lastName | email | phone | timestamp | date | results
 ```
 
 #### Step 2: Set Up Apps Script
@@ -35,14 +35,15 @@ function doPost(e) {
     // Get data from POST request (URLSearchParams format)
     var params = e.parameter;
     
-    // Add row with data
+    // Add row with data - includes both user info and comprehensive assessment results
     sheet.appendRow([
       params.firstName || '',
       params.lastName || '',
       params.email || '',
       params.phone || '',
       params.timestamp || '',
-      params.date || ''
+      params.date || '',
+      params.results || ''
     ]);
     
     // Return success response
@@ -163,8 +164,9 @@ VITE_GOOGLE_SHEETS_URL=https://sheet.best/api/sheets/YOUR_SHEET_ID
 
 ## What Data Gets Saved?
 
-When a user clicks "Commencer l'évaluation", this data is saved:
+When a user completes the assessment, this data is saved:
 
+### User Information
 | Column | Description | Example |
 |--------|-------------|---------|
 | firstName | User's first name | "Marie" |
@@ -173,6 +175,43 @@ When a user clicks "Commencer l'évaluation", this data is saved:
 | phone | User's phone (optional) | "+33 6 12 34 56 78" |
 | timestamp | ISO timestamp | "2024-01-15T14:30:00.000Z" |
 | date | Formatted date | "15 janvier 2024 à 14:30" |
+
+### Assessment Results
+| Column | Description | Example |
+|--------|-------------|---------|
+| results | Complete assessment data in JSON format | See detailed structure below |
+
+#### Results JSON Structure:
+```json
+{
+  "overall": {
+    "totalScore": 145,
+    "totalPercentage": 69,
+    "profile": "Équilibré"
+  },
+  "batteries": {
+    "physical": {
+      "score": 22,
+      "level": "optimal",
+      "percentage": 73,
+      "answers": {
+        "Sommeil": "Je dors bien et me réveille reposé(e)",
+        "Ton niveau d'énergie": "Stable et suffisant"
+      }
+    },
+    "mental": {
+      "score": 18,
+      "level": "unstable", 
+      "percentage": 60,
+      "answers": {
+        "Clarté mentale": "Je pense clairement et décide facilement",
+        "Ruminations": "Rarement"
+      }
+    }
+    // ... other batteries
+  }
+}
+```
 
 ---
 
@@ -214,7 +253,7 @@ When a user clicks "Commencer l'évaluation", this data is saved:
 
 **Solution**: Make sure row 1 has these EXACT headers:
 ```
-firstName | lastName | email | phone | timestamp | date
+firstName | lastName | email | phone | timestamp | date | results
 ```
 
 ### ✅ Testing Your Deployment

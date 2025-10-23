@@ -1,4 +1,5 @@
-import { Download, RotateCcw, AlertCircle, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Download, RotateCcw, AlertCircle, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { useState } from 'react';
 import { AssessmentResults } from '../types';
 import { batteryInfo, getLevelLabel } from '../data/batteries';
 import { generatePDF } from '../utils/pdfGenerator';
@@ -15,8 +16,17 @@ interface Props {
 }
 
 const Results = ({ results, onRestart }: Props) => {
-  const handleDownloadPDF = () => {
-    generatePDF(results);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const handleDownloadPDF = async () => {
+    setIsGeneratingPDF(true);
+    try {
+      await generatePDF(results);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   const criticalBatteries = results.scores.filter(s => s.level === 'critical');
@@ -251,11 +261,21 @@ const Results = ({ results, onRestart }: Props) => {
               </ul>
               <Button 
                 onClick={handleDownloadPDF} 
+                disabled={isGeneratingPDF}
                 className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
                 size="lg"
               >
-                <Download className="mr-2" size={20} />
-                Télécharger Mon Bilan PDF
+                {isGeneratingPDF ? (
+                  <>
+                    <Loader2 className="mr-2 animate-spin" size={20} />
+                    Génération en cours...
+                  </>
+                ) : (
+                  <>
+                    <Download className="mr-2" size={20} />
+                    Télécharger Mon Bilan PDF
+                  </>
+                )}
               </Button>
             </CardContent>
           </Card>
