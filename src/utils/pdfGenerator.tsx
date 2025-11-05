@@ -14,7 +14,12 @@ import {
 } from "@react-pdf/renderer";
 import { AssessmentResults, BatteryScore } from "../types";
 import { batteryInfo, getLevelLabel } from "../data/batteries";
-import pdfContentData from "../data/pdfContent.json";
+import pdfContentDataFull from "../data/pdfContent.json";
+import pdfContentDataMinimal from "../data/pdfContentMinimal.json";
+import { VERSION_MODE } from "./googleSheets";
+
+// Select the appropriate content based on version mode
+const pdfContentData = VERSION_MODE === 'minimal' ? pdfContentDataMinimal : pdfContentDataFull;
 
 // Map English keys to French names for content lookup
 const batteryNameMap: Record<string, string> = {
@@ -843,7 +848,7 @@ const BatteryDetailPage = ({
             }}
           >
             <Link
-              src="https://www.niia.coach/masterclass-gratuite"
+              src={VERSION_MODE === 'minimal' ? "https://www.niia.coach/masterclass-gratuite" : "https://www.niia.coach"}
               style={{ textDecoration: "none" }}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -1060,14 +1065,16 @@ const IntroductionPage = () => {
           <Text style={styles.introParagraph}>
             Il t'aide à voir où ton énergie fuit, pour mieux la restaurer.
           </Text>
-          <Text style={{ ...styles.introParagraph, marginBottom: 0 }}>
-            Et si tu veux aller plus loin, la Masterclass du 30 octobre
-            t'accompagnera à transformer cet épuisement silencieux en clarté
-            durable —{" "}
-            <Text style={{ fontWeight: "bold" }}>
-              sans culpabilité, en 30 min par jour.
+          {VERSION_MODE === 'minimal' && (
+            <Text style={{ ...styles.introParagraph, marginBottom: 0 }}>
+              Et si tu veux aller plus loin, la Masterclass (Jeudi)
+              t'accompagnera à transformer cet épuisement silencieux en clarté
+              durable —{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                sans culpabilité, en 30 min par jour.
+              </Text>
             </Text>
-          </Text>
+          )}
         </View>
 
         {/* Separator */}
@@ -1132,18 +1139,33 @@ const DiagnosticOverviewPage = ({
   return (
     <Page size="A4" style={styles.page}>
       <View style={styles.sheet}>
-        {/* Header */}
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: "bold",
-            color: "#1c3b5a",
-            textAlign: "center",
-            marginBottom: 6,
-          }}
-        >
-          Diagnostic Burn-Out Silencieux
-        </Text>
+        {/* Header - Conditional title based on version */}
+        {VERSION_MODE === 'minimal' && (
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: "#1c3b5a",
+              textAlign: "center",
+              marginBottom: 6,
+            }}
+          >
+            Diagnostic Burn-Out Silencieux
+          </Text>
+        )}
+        {VERSION_MODE === 'full' && (
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              color: "#1c3b5a",
+              textAlign: "center",
+              marginBottom: 6,
+            }}
+          >
+            Diagnostic des 7 Batteries de Vie
+          </Text>
+        )}
         <Text
           style={{
             fontSize: 9,
@@ -1518,54 +1540,56 @@ const DiagnosticOverviewPage = ({
           })}
         </View>
 
-        {/* Masterclass CTA Button */}
-        <Link
-          src="https://www.niia.coach/masterclass-gratuite"
-          style={{ textDecoration: "none" }}
-        >
-          <View
-            style={{
-              backgroundColor: "#d96536",
-              padding: 10,
-              borderRadius: 10,
-              marginTop: 10,
-              alignItems: "center",
-            }}
+        {/* Masterclass CTA Button - Only for minimal version */}
+        {VERSION_MODE === 'minimal' && (
+          <Link
+            src="https://www.niia.coach/masterclass-gratuite"
+            style={{ textDecoration: "none" }}
           >
-            <Text
+            <View
               style={{
-                fontSize: 10,
-                color: "#fff",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: 4,
+                backgroundColor: "#d96536",
+                padding: 10,
+                borderRadius: 10,
+                marginTop: 10,
+                alignItems: "center",
               }}
             >
-              Masterclass Gratuite du 30 Octobre
-            </Text>
-            <Text
-              style={{
-                fontSize: 7.5,
-                color: "#fff",
-                textAlign: "center",
-                marginBottom: 6,
-              }}
-            >
-              Transforme ton épuisement en clarté durable (30 min/jour)
-            </Text>
-            <Text
-              style={{
-                fontSize: 8,
-                color: "#fff",
-                fontWeight: "bold",
-                textAlign: "center",
-                letterSpacing: 0.5,
-              }}
-            >
-              https://www.niia.coach/masterclass-gratuite{" "}
-            </Text>
-          </View>
-        </Link>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  marginBottom: 4,
+                }}
+              >
+                Masterclass Gratuite (Jeudi)
+              </Text>
+              <Text
+                style={{
+                  fontSize: 7.5,
+                  color: "#fff",
+                  textAlign: "center",
+                  marginBottom: 6,
+                }}
+              >
+                Transforme ton épuisement en clarté durable (30 min/jour)
+              </Text>
+              <Text
+                style={{
+                  fontSize: 8,
+                  color: "#fff",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  letterSpacing: 0.5,
+                }}
+              >
+                https://www.niia.coach/masterclass-gratuite{" "}
+              </Text>
+            </View>
+          </Link>
+        )}
 
         {/* Footer */}
         <View
@@ -1618,7 +1642,7 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
           <BatteryDetailPage key={score.battery} batteryScore={score} />
         ))}
 
-      {/* Final CTA Page */}
+      {/* Final CTA Page - Conditional based on version */}
       <Page size="A4" style={styles.page}>
         <View
           style={[
@@ -1653,11 +1677,13 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
               paddingHorizontal: 40,
             }}
           >
-            Ce diagnostic t'a révélé où ton énergie fuit. Maintenant, il est
-            temps d'apprendre à la restaurer durablement.
+            {VERSION_MODE === 'minimal' 
+              ? "Ce diagnostic t'a révélé où ton énergie fuit. Maintenant, il est temps d'apprendre à la restaurer durablement."
+              : "Ce diagnostic t'a révélé l'état de tes 7 batteries de vie. Utilise ces insights pour prendre soin de ton énergie au quotidien."}
           </Text>
 
-          {/* Masterclass Box */}
+          {/* Masterclass Box - Only for minimal version */}
+          {VERSION_MODE === 'minimal' && (
           <View
             style={{
               width: "85%",
@@ -1704,7 +1730,7 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
                 fontWeight: "bold",
               }}
             >
-              30 octobre 2025 à 20h00 (Heure de Paris)
+              Jeudi à 20h00 (Heure de Paris)
             </Text>
 
             <View style={{ marginBottom: 15 }}>
@@ -1791,6 +1817,7 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
               Places limitées • 50 personnes max
             </Text>
           </View>
+          )}
 
           {/* Final Quote */}
           <Text
@@ -1803,7 +1830,9 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
               paddingHorizontal: 50,
             }}
           >
-            "Tu mérites de te sentir vivant(e), pas juste performant(e)."
+            {VERSION_MODE === 'minimal'
+              ? '"Tu mérites de te sentir vivant(e), pas juste performant(e)."'
+              : '"Prends soin de ton énergie, elle est ton plus grand trésor."'}
           </Text>
 
           {/* Footer */}
@@ -1817,7 +1846,7 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
             }}
           >
             <Link
-              src="https://www.niia.coach/masterclass-gratuite"
+              src={VERSION_MODE === 'minimal' ? "https://www.niia.coach/masterclass-gratuite" : "https://www.niia.coach"}
               style={{ textDecoration: "none" }}
             >
               <Text
@@ -1853,7 +1882,7 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
               }}
             >
               <Link
-                src="https://www.niia.coach/masterclass-gratuite"
+                src={VERSION_MODE === 'minimal' ? "https://www.niia.coach/masterclass-gratuite" : "https://www.niia.coach"}
                 style={{ textDecoration: "none" }}
               >
                 <View style={{ flexDirection: "row", alignItems: "center" }}>

@@ -48,8 +48,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Retrouver des preuves de toi réactive ton cap intérieur.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie identitaire sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Tu oscilles entre toi et le masque. On ancre du vrai, pas à pas.",
@@ -99,8 +99,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Un engagement simple + une preuve lancent la dynamique.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Tu te respectes et ça se voit. On garde le cap et la douceur.",
@@ -150,8 +150,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Répéter le lien valeur→action renforce l’identité.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie identitaire est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet alignement ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   },
   "Mentale": {
@@ -203,8 +203,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Sortir les pensées de la tête calme le système et clarifie l’action.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie mentale sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Parfois clair, parfois flou. On crée un rythme doux et régulier.",
@@ -254,8 +254,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Des boucles courtes + pauses = focus plus stable.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas de ta batterie mentale ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Clarté et fluidité. On sécurise ta cadence pour durer.",
@@ -305,8 +305,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Un cadrage simple garde l’esprit aligné et productif.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie mentale est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet équilibre ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   },
   "Physique": {
@@ -358,8 +358,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Cette respiration active ton « frein » (nerf vague) et coupe l’alarme intérieure.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie physique sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Ton énergie fait le yo-yo. On stabilise doucement, sans forcer.",
@@ -409,8 +409,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Des mini-pauses régulières recalent ton système sans te cramer.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas de ta batterie physique ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Ton corps répond bien. On entretient l’élan et la souplesse.",
@@ -460,8 +460,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Entretenir le calme + la mobilité évite d’accumuler des tensions.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie physique est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet équilibre ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   },
   "Professionnelle": {
@@ -513,8 +513,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Alléger vite redonne de l’oxygène à tout le système.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie professionnelle sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Des semaines inégales. On ancre des routines simples et efficaces.",
@@ -564,8 +564,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Un petit cadre quotidien maintient l’élan sans brûler.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas de ta batterie professionnelle ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Tu crées de la valeur avec sérénité. On sécurise ta trajectoire.",
@@ -615,8 +615,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Mesurer peu mais souvent maintient la clarté.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie professionnelle est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet équilibre ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   },
   "Relationnelle": {
@@ -668,8 +668,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Dire vrai en douceur reconstruit la confiance (en toi et en l’autre).",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie relationnelle sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Chaud/froid. On installe des habitudes qui rassurent des deux côtés.",
@@ -719,8 +719,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Se sentir entendu suffit souvent à baisser la pression.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas de ta batterie relationnelle ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Tes liens te nourrissent. On cultive la qualité et la constance.",
@@ -770,8 +770,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Nommer le positif renforce le lien sans nier le réel.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie relationnelle est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet équilibre ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   },
   "Spirituelle": {
@@ -823,8 +823,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Le silence extérieur aide la petite voix intérieure à reparler.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie spirituelle sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Parfois connecté(e), parfois loin. On ritualise la connexion.",
@@ -874,8 +874,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Questionner doucement rallume l’intérieur sans pression.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas de ta batterie spirituelle ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Tu es ancré(e) et ouvert(e). On honore ce lien chaque jour.",
@@ -925,8 +925,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Le cerveau encode mieux ce qu’il voit et ressent calmement.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie spirituelle est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet équilibre ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   },
   "Émotionnelle": {
@@ -978,8 +978,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Le souffle régulier envoie « tout va bien » à ton système.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu te reconnais ici ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) pour apprendre à stabiliser ta batterie émotionnelle sans t'épuiser. Places limitées !",
+      "FOOTER_FORCE_CTA": "Ton énergie a besoin de secours MAINTENANT. Donne-toi ce cadeau : réserve ta place à la Masterclass Gratuite (Jeudi), on le fait ensemble !"
     },
     "Instable": {
       "HEADER_SOUS_TITRE": "Sensibilité fine, parfois fatigante. On apprend à surfer la vague.",
@@ -1029,8 +1029,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "Observer + nommer = déjà réguler, sans forcer.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Tu veux lisser les hauts et bas de ta batterie émotionnelle ? Rejoins la Masterclass GRATUITE (Jeudi à 20h) — on installe ensemble des routines douces et tenables. Réserve ta place maintenant !",
+      "FOOTER_FORCE_CTA": "Ne laisse pas les montagnes russes s'installer ! Ancre tes nouveaux repères dès Jeudi : réserve ta place à la Masterclass Gratuite et passe au stable."
     },
     "Optimal": {
       "HEADER_SOUS_TITRE": "Tu comprends tes émotions et tu t’en sers. On consolide ce talent.",
@@ -1080,8 +1080,8 @@
       "S3_EXO_ETAPE_5": "—",
       "S3_EXO_ETAPE_6": "—",
       "S3_EXO_POURQUOI": "La gratitude active des circuits apaisants et pro‑sociaux.",
-      "CTA_LOCAL": "",
-      "FOOTER_FORCE_CTA": ""
+      "CTA_LOCAL": "Ta batterie émotionnelle est solide ! Viens à la Masterclass GRATUITE (Jeudi) pour découvrir comment maintenir cet équilibre ET aider les autres. Partage ce quiz et rejoins-nous !",
+      "FOOTER_FORCE_CTA": "Tu es sur une bonne trajectoire ! Rejoins la Masterclass Gratuite (Jeudi) pour approfondir et aider d'autres à se relever."
     }
   }
 }

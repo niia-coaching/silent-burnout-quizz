@@ -10,6 +10,9 @@
 
 const GOOGLE_SHEETS_URL = import.meta.env.VITE_GOOGLE_SHEETS_URL;
 
+// Export VERSION_MODE so it can be used throughout the app
+export const VERSION_MODE = import.meta.env.VITE_VERSION_MODE || 'full'; // Default to 'full'
+
 // Alternative: Use Google Apps Script (Free, unlimited)
 // See GOOGLE_SHEETS_SETUP.md for full instructions
 
@@ -24,11 +27,12 @@ export interface UserData {
 export interface AssessmentData extends UserData {
   // Consolidated results in a single column
   results: string; // JSON string containing all assessment data
+  version: string; // 'full' or 'minimal' - tracks which version of the quiz was taken
 }
 
 export const saveToGoogleSheets = async (userData: UserData): Promise<boolean> => {
   try {
-    // Add timestamp if not provided
+    // Add timestamp and version if not provided
     const dataToSubmit = {
       ...userData,
       timestamp: userData.timestamp || new Date().toISOString(),
@@ -39,6 +43,7 @@ export const saveToGoogleSheets = async (userData: UserData): Promise<boolean> =
         hour: '2-digit',
         minute: '2-digit',
       }),
+      version: VERSION_MODE, // Track which version was used
     };
 
     // Use URLSearchParams for Google Apps Script (avoids CORS preflight)
@@ -71,7 +76,7 @@ export const saveToGoogleSheets = async (userData: UserData): Promise<boolean> =
 
 export const saveAssessmentResults = async (assessmentData: AssessmentData): Promise<boolean> => {
   try {
-    // Add timestamp if not provided
+    // Add timestamp and version if not provided
     const dataToSubmit = {
       ...assessmentData,
       timestamp: assessmentData.timestamp || new Date().toISOString(),
@@ -82,6 +87,7 @@ export const saveAssessmentResults = async (assessmentData: AssessmentData): Pro
         hour: '2-digit',
         minute: '2-digit',
       }),
+      version: assessmentData.version || VERSION_MODE, // Track which version was used
     };
 
     // Use URLSearchParams for Google Apps Script (avoids CORS preflight)

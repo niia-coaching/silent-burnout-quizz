@@ -1,6 +1,14 @@
 # Google Sheets Integration Setup - Complete Guide
 
-This app saves user information to Google Sheets when they start the assessment. This guide includes the **working solution** that avoids CORS issues.
+This app saves user information to Google Sheets when they complete the assessment. This guide includes the **working solution** that avoids CORS issues.
+
+## Version Tracking
+
+The quiz now supports two versions:
+- **Full**: Complete detailed content without masterclass promotion
+- **Minimal**: Limited content with masterclass promotion to encourage sign-ups
+
+The version is automatically tracked in the Google Sheet's `version` column.
 
 ---
 
@@ -17,7 +25,7 @@ This is the **working method** that avoids CORS errors!
 3. Add these column headers in **row 1**:
 
 ```
-firstName | lastName | email | phone | timestamp | date | results
+firstName | lastName | email | phone | timestamp | date | results | version
 ```
 
 #### Step 2: Set Up Apps Script
@@ -43,7 +51,8 @@ function doPost(e) {
       params.phone || '',
       params.timestamp || '',
       params.date || '',
-      params.results || ''
+      params.results || '',
+      params.version || 'full'  // Track which version (full/minimal) was used
     ]);
     
     // Return success response
@@ -180,6 +189,7 @@ When a user completes the assessment, this data is saved:
 | Column | Description | Example |
 |--------|-------------|---------|
 | results | Complete assessment data in JSON format | See detailed structure below |
+| version | Quiz version taken (full or minimal) | "full" or "minimal" |
 
 #### Results JSON Structure:
 ```json
@@ -253,7 +263,7 @@ When a user completes the assessment, this data is saved:
 
 **Solution**: Make sure row 1 has these EXACT headers:
 ```
-firstName | lastName | email | phone | timestamp | date | results
+firstName | lastName | email | phone | timestamp | date | results | version
 ```
 
 ### ✅ Testing Your Deployment

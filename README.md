@@ -21,12 +21,43 @@ Une application web moderne pour évaluer les 7 batteries de vie (Physique, Ment
 # Installer les dépendances
 npm install
 
+# Copier le fichier d'environnement exemple
+cp .env.example .env
+
+# Configurer les variables d'environnement dans .env
+# - VITE_GOOGLE_SHEETS_URL : URL de votre Google Apps Script
+# - VITE_VERSION_MODE : 'full' ou 'minimal'
+
 # Lancer le serveur de développement
 npm run dev
 
 # Builder pour la production
 npm run build
 ```
+
+## ⚙️ Configuration des Versions
+
+Le quiz supporte deux modes de version configurables via `.env`:
+
+### Version "Full" (Par défaut)
+```env
+VITE_VERSION_MODE=full
+```
+- ✅ Contenu détaillé complet dans les résultats
+- ✅ PDF avec analyses approfondies et exercices
+- ❌ Pas de promotion de la masterclass
+- 🎯 Idéal pour : offres premium, clients payants, version autonome
+
+### Version "Minimal"  
+```env
+VITE_VERSION_MODE=minimal
+```
+- ⚡ Contenu résumé dans les résultats
+- ⚡ PDF avec aperçu limité
+- ✅ Promotion de la masterclass sur la page de résultats et dans le PDF
+- 🎯 Idéal pour : lead generation, funnel marketing, promotion d'événements
+
+La version utilisée est automatiquement enregistrée dans Google Sheets pour le suivi.
 
 ## 🎯 Structure du projet
 

@@ -9,7 +9,7 @@ import {
 import { batteryInfo } from "../data/batteries";
 import { calculateResults } from "../utils/scoring";
 import { AssessmentResults, BatteryType } from "../types";
-import { saveAssessmentResults, AssessmentData } from "../utils/googleSheets";
+import { saveAssessmentResults, AssessmentData, VERSION_MODE } from "../utils/googleSheets";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -136,6 +136,86 @@ const Questionnaire = ({ onComplete }: Props) => {
     setAnswers((prev) => ({ ...prev, [question.id]: points }));
   };
 
+  // DEV ONLY: Fill random answers for quick testing
+  const fillRandomAnswers = async () => {
+    // Fill form with test data
+    setFirstName("Test");
+    setLastName("User");
+    setEmail("test@example.com");
+    setPhone("+33 6 12 34 56 78");
+
+    // Generate randomized questions
+    const randomized = getAllRandomizedQuestions();
+    
+    // Generate random answers for all questions
+    const randomAnswers: Record<string, number> = {};
+    randomized.forEach((question) => {
+      // Randomly select one of the options (0, 2, 4, or 6 points)
+      const randomOption = question.options[Math.floor(Math.random() * question.options.length)];
+      randomAnswers[question.id] = randomOption.points;
+    });
+    
+    // Set everything properly
+    setRandomizedQuestions(randomized);
+    setAnswers(randomAnswers);
+    
+    // Wait for state to update, then calculate and show results
+    setTimeout(async () => {
+      setIsGeneratingResults(true);
+      try {
+        const results = calculateResults("Test", randomAnswers);
+        
+        // Save to Google Sheets if not already saved
+        if (!resultsSaved) {
+          setResultsSaved(true);
+          try {
+            const answersByBattery: Record<string, Record<string, string>> = {};
+            const batteries = ['physical', 'mental', 'emotional', 'identity', 'relational', 'professional', 'spiritual'];
+            batteries.forEach(battery => {
+              answersByBattery[battery] = {};
+            });
+            
+            Object.entries(randomAnswers).forEach(([questionId, points]) => {
+              const question = randomized.find(q => q.id === questionId);
+              if (question) {
+                const selectedOption = question.options.find(option => option.points === points);
+                if (selectedOption) {
+                  answersByBattery[question.battery][question.text] = selectedOption.text;
+                }
+              }
+            });
+
+            const resultsObject: AssessmentData = {
+              firstName: "Test",
+              lastName: "User",
+              email: "test@example.com",
+              phone: "+33 6 12 34 56 78",
+              timestamp: new Date().toISOString(),
+              results: JSON.stringify({
+                answers: answersByBattery,
+                scores: results.scores,
+                totalScore: results.totalScore,
+                totalPercentage: results.totalPercentage,
+                profile: results.profile,
+              }),
+              version: VERSION_MODE,
+            };
+
+            await saveAssessmentResults(resultsObject);
+          } catch (error) {
+            console.error("Error saving test results:", error);
+          }
+        }
+        
+        onComplete(results);
+      } catch (error) {
+        console.error("Error generating test results:", error);
+      } finally {
+        setIsGeneratingResults(false);
+      }
+    }, 300);
+  };
+
   const handleNext = async () => {
     if (showBatteryValidation) {
       setShowBatteryValidation(false);
@@ -239,7 +319,8 @@ const Questionnaire = ({ onComplete }: Props) => {
               email: email.trim(),
               phone: phone.trim() || "Non renseigné",
               timestamp: new Date().toISOString(),
-              results: createResultsObject()
+              results: createResultsObject(),
+              version: VERSION_MODE
             };
 
             await saveAssessmentResults(assessmentData);
@@ -428,6 +509,18 @@ const Questionnaire = ({ onComplete }: Props) => {
                     </>
                   )}
                 </Button>
+
+                {/* DEV ONLY: Quick test button - controlled by VITE_ENABLE_TEST_MODE */}
+                {import.meta.env.VITE_ENABLE_TEST_MODE === 'true' && (
+                  <Button
+                    onClick={fillRandomAnswers}
+                    variant="outline"
+                    className="w-full border-2 border-amber-500 text-amber-700 hover:bg-amber-50"
+                    size="lg"
+                  >
+                    🎲 Remplir avec réponses aléatoires (TEST)
+                  </Button>
+                )}
 
               </div>
 

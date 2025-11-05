@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AssessmentResults } from '../types';
 import { batteryInfo, getLevelLabel } from '../data/batteries';
 import { generatePDF } from '../utils/pdfGenerator';
+import { VERSION_MODE } from '../utils/googleSheets';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Badge } from './ui/badge';
@@ -142,7 +143,7 @@ const Results = ({ results, onRestart }: Props) => {
           </CardContent>
         </Card>
 
-        {/* Priorities */}
+        {/* Priorities - Conditional detail based on version */}
         {priorities.length > 0 && (
           <Card className="shadow-lg border-l-4 border-niia-terracotta">
             <CardHeader>
@@ -151,7 +152,9 @@ const Results = ({ results, onRestart }: Props) => {
                 Tes 3 Priorités Immédiates
               </CardTitle>
               <CardDescription className="text-niia-gray">
-                Ces batteries nécessitent ton attention en priorité
+                {VERSION_MODE === 'minimal' 
+                  ? 'Découvre tes axes d\'amélioration - rejoins la masterclass pour un plan détaillé'
+                  : 'Ces batteries nécessitent ton attention en priorité'}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -178,9 +181,16 @@ const Results = ({ results, onRestart }: Props) => {
                         <Progress value={batteryScore.percentage} className="flex-1 h-2" />
                         <span className="text-sm font-medium text-niia-gray">{batteryScore.percentage}%</span>
                       </div>
-                      <p className="text-sm text-niia-gray">
-                        {getQuickActionText(batteryScore.battery, batteryScore.level)}
-                      </p>
+                      {VERSION_MODE === 'full' && (
+                        <p className="text-sm text-niia-gray">
+                          {getQuickActionText(batteryScore.battery, batteryScore.level)}
+                        </p>
+                      )}
+                      {VERSION_MODE === 'minimal' && (
+                        <p className="text-sm text-niia-gray italic">
+                          Action détaillée disponible dans la masterclass
+                        </p>
+                      )}
                     </div>
                   </div>
                 );
@@ -233,101 +243,140 @@ const Results = ({ results, onRestart }: Props) => {
           </CardContent>
         </Card>
 
-        {/* CTA Section - Side by Side */}
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Download Report Card */}
-          <Card className="shadow-lg border-niia-beige">
-            <CardHeader>
-              <CardTitle className="font-spartan text-niia-blue-dark">Télécharge Ton Rapport Complet</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="space-y-2 text-sm">
-                <li className="flex items-start gap-2">
-                  <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
-                  <span>Analyse détaillée de chaque batterie</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
-                  <span>1 exercice concret par batterie</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
-                  <span>Recommandations personnalisées</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
-                  <span>Ton plan d'action complet</span>
-                </li>
-              </ul>
-              <Button 
-                onClick={handleDownloadPDF} 
-                disabled={isGeneratingPDF}
-                className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
-                size="lg"
-              >
-                {isGeneratingPDF ? (
-                  <>
-                    <Loader2 className="mr-2 animate-spin" size={20} />
-                    Génération en cours...
-                  </>
-                ) : (
-                  <>
-                    <Download className="mr-2" size={20} />
-                    Télécharger Mon Bilan PDF
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Masterclass Card */}
-          <Card className="shadow-lg bg-gradient-to-br from-niia-blue-dark to-niia-teal-dark text-white border-none">
-            <CardHeader>
-              <CardTitle className="text-white font-spartan">Masterclass Gratuite (90 min)</CardTitle>
-              <CardDescription className="text-niia-beige-light">
-                "Transforme ton épuisement silencieux en clarté intérieure"
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-white">
-                📅 Jeudi à 20h00 (Heure de Paris)
-              </p>
-              <p className="text-sm text-white">
-                Découvre la méthode IMPACT pour retrouver ton énergie en 30 minutes par jour, sans culpabilité.
-              </p>
-              
-              {/* Dynamic priorities section */}
-              {priorities.length > 0 && (
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                  <p className="text-xs mb-2">
-                    📍 Focus spécial pour toi sur {priorities.length === 1 ? 'la batterie' : 'les batteries'} :
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {priorities.map((battery) => (
-                      <span 
-                        key={battery.battery}
-                        className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium"
-                      >
-                        {batteryInfo[battery.battery].name}
-                      </span>
-                    ))}
+        {/* CTA Section - Conditional based on version */}
+        {VERSION_MODE === 'minimal' ? (
+          // MINIMAL VERSION - Show Masterclass prominently, limited PDF info
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Masterclass Card - Primary CTA */}
+            <Card className="shadow-lg bg-gradient-to-br from-niia-blue-dark to-niia-teal-dark text-white border-none md:col-span-2">
+              <CardHeader>
+                <CardTitle className="text-white font-spartan text-center text-2xl">Masterclass Gratuite (90 min)</CardTitle>
+                <CardDescription className="text-niia-beige-light text-center text-lg">
+                  "Transforme ton épuisement silencieux en clarté intérieure"
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-white text-center">
+                  📅 Jeudi à 20h00 (Heure de Paris)
+                </p>
+                <p className="text-sm text-white text-center">
+                  Découvre la méthode IMPACT pour retrouver ton énergie en 30 minutes par jour, sans culpabilité.
+                </p>
+                
+                {/* Dynamic priorities section */}
+                {priorities.length > 0 && (
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
+                    <p className="text-xs mb-2 text-center">
+                      📍 Focus spécial pour toi sur {priorities.length === 1 ? 'la batterie' : 'les batteries'} :
+                    </p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {priorities.map((battery) => (
+                        <span 
+                          key={battery.battery}
+                          className="px-2 py-1 bg-white/20 rounded-full text-xs font-medium"
+                        >
+                          {batteryInfo[battery.battery].name}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              <Button 
-                onClick={() => window.open('https://www.niia.coach/masterclass-gratuite', '_blank')}
-                className="w-full bg-niia-terracotta hover:bg-niia-terracotta/90 text-white font-semibold" 
-                size="lg"
-              >
-                Je Réserve Ma Place
-              </Button>
-              <p className="text-xs text-center text-niia-beige-light">
-                Places limitées : 50 personnes max
-              </p>
-            </CardContent>
-          </Card>
-        </div>
+                <Button 
+                  onClick={() => window.open('https://www.niia.coach/masterclass-gratuite', '_blank')}
+                  className="w-full bg-niia-terracotta hover:bg-niia-terracotta/90 text-white font-semibold" 
+                  size="lg"
+                >
+                  Je Réserve Ma Place
+                </Button>
+                <p className="text-xs text-center text-niia-beige-light">
+                  Places limitées : 50 personnes max
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Limited PDF Download Card */}
+            <Card className="shadow-lg border-niia-beige md:col-span-2">
+              <CardHeader>
+                <CardTitle className="font-spartan text-niia-blue-dark text-center">Aperçu de Ton Diagnostic</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-niia-gray text-center">
+                  Télécharge un résumé de tes résultats. Pour une analyse complète et un plan d'action détaillé, rejoins la masterclass.
+                </p>
+                <Button 
+                  onClick={handleDownloadPDF} 
+                  disabled={isGeneratingPDF}
+                  className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
+                  size="lg"
+                >
+                  {isGeneratingPDF ? (
+                    <>
+                      <Loader2 className="mr-2 animate-spin" size={20} />
+                      Génération en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2" size={20} />
+                      Télécharger l'Aperçu PDF
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          // FULL VERSION - Detailed PDF info, NO masterclass
+          <div className="grid md:grid-cols-1 gap-6">
+            {/* Download Report Card - Full width, detailed */}
+            <Card className="shadow-lg border-niia-beige">
+              <CardHeader>
+                <CardTitle className="font-spartan text-niia-blue-dark">Télécharge Ton Rapport Complet</CardTitle>
+                <CardDescription className="text-niia-gray">
+                  Accède à une analyse approfondie et des exercices pratiques
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <ul className="space-y-2 text-sm grid md:grid-cols-2 gap-4">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
+                    <span>Analyse détaillée de chaque batterie</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
+                    <span>1 exercice concret par batterie</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
+                    <span>Recommandations personnalisées</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle size={16} className="text-niia-teal mt-0.5 flex-shrink-0" />
+                    <span>Ton plan d'action complet</span>
+                  </li>
+                </ul>
+                <Button 
+                  onClick={handleDownloadPDF} 
+                  disabled={isGeneratingPDF}
+                  className="w-full bg-niia-blue-dark hover:bg-niia-teal-dark text-white font-semibold" 
+                  size="lg"
+                >
+                  {isGeneratingPDF ? (
+                    <>
+                      <Loader2 className="mr-2 animate-spin" size={20} />
+                      Génération en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2" size={20} />
+                      Télécharger Mon Bilan PDF
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Restart Button */}
         <div className="text-center">
