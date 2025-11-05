@@ -11,7 +11,7 @@
 const GOOGLE_SHEETS_URL = import.meta.env.VITE_GOOGLE_SHEETS_URL;
 
 // Export VERSION_MODE so it can be used throughout the app
-export const VERSION_MODE = import.meta.env.VITE_VERSION_MODE || 'full'; // Default to 'full'
+export const VERSION_MODE = (import.meta.env.VITE_VERSION_MODE || 'full') as 'full' | 'minimal'; // Default to 'full'
 
 // Alternative: Use Google Apps Script (Free, unlimited)
 // See GOOGLE_SHEETS_SETUP.md for full instructions

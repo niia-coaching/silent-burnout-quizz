@@ -16,7 +16,10 @@ import { AssessmentResults, BatteryScore } from "../types";
 import { batteryInfo, getLevelLabel } from "../data/batteries";
 import pdfContentDataFull from "../data/pdfContent.json";
 import pdfContentDataMinimal from "../data/pdfContentMinimal.json";
-import { VERSION_MODE } from "./googleSheets";
+import { VERSION_MODE as IMPORTED_VERSION_MODE } from "./googleSheets";
+
+// Type assertion to fix TypeScript comparison issues
+const VERSION_MODE = IMPORTED_VERSION_MODE as 'full' | 'minimal';
 
 // Select the appropriate content based on version mode
 const pdfContentData = VERSION_MODE === 'minimal' ? pdfContentDataMinimal : pdfContentDataFull;
@@ -423,6 +426,205 @@ const getFilledSegments = (level: string): number => {
   }
 };
 
+// Combined 3 Batteries Page Component (Minimal Version Only)
+const CombinedBatteriesPage = ({
+  batteries,
+}: {
+  batteries: BatteryScore[];
+}) => {
+  return (
+    <Page size="A4" style={styles.page}>
+      <View style={styles.sheet}>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            color: "#1c3b5a",
+            textAlign: "center",
+            marginBottom: 10,
+          }}
+        >
+          Tes 3 Batteries Prioritaires
+        </Text>
+
+        {batteries.map((batteryScore, index) => {
+          const info = batteryInfo[batteryScore.battery];
+          const levelLabel = getLevelLabel(batteryScore.level);
+          const accentColor = getAccentColor(batteryScore.level);
+          const filledSegments = getFilledSegments(batteryScore.level);
+
+          // Get content
+          const introMirror = getContent(
+            batteryScore.battery,
+            batteryScore.level,
+            "INTRO_MIRROR"
+          );
+          const urgencyTitle = getContent(batteryScore.battery, batteryScore.level, "URGENCY_TITLE");
+          const urgency1 = getContent(batteryScore.battery, batteryScore.level, "URGENCY_1");
+          const urgency2 = getContent(batteryScore.battery, batteryScore.level, "URGENCY_2");
+          const masterclassReveal = getContent(batteryScore.battery, batteryScore.level, "MASTERCLASS_REVEAL");
+          const masterclassTeaser = getContent(batteryScore.battery, batteryScore.level, "MASTERCLASS_TEASER");
+
+          const isValidContent = (content: string) =>
+            content && content.trim() !== "" && content.trim() !== "—";
+
+          return (
+            <View
+              key={batteryScore.battery}
+              style={{
+                marginBottom: index < batteries.length - 1 ? 14 : 0,
+                padding: 10,
+                backgroundColor: `${accentColor}05`,
+                borderRadius: 6,
+                borderWidth: 1,
+                borderColor: `${accentColor}30`,
+                borderStyle: "solid",
+              }}
+              wrap={false}
+            >
+              {/* Header with Battery Icon and Score */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 7,
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontWeight: "bold",
+                      color: "#1c3b5a",
+                      marginBottom: 2,
+                    }}
+                  >
+                    {index + 1}. Batterie {info.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 8.5,
+                      color: accentColor,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    État: {levelLabel}
+                  </Text>
+                </View>
+
+                {/* Battery Icon and Score on the right */}
+                <View style={{ alignItems: "center" }}>
+                  {/* Battery Icon */}
+                  <View
+                    style={{
+                      width: 28,
+                      height: 14,
+                      borderWidth: 1.5,
+                      borderColor: accentColor,
+                      borderStyle: "solid",
+                      borderRadius: 2,
+                      position: "relative",
+                      marginBottom: 3,
+                    }}
+                  >
+                    {/* Battery Terminal */}
+                    <View
+                      style={{
+                        width: 2.5,
+                        height: 5,
+                        backgroundColor: accentColor,
+                        position: "absolute",
+                        right: -3,
+                        top: "50%",
+                        transform: "translateY(-2.5px)",
+                      }}
+                    />
+                    {/* Battery Fill Segments */}
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        height: "100%",
+                        gap: 1,
+                        padding: 1.5,
+                      }}
+                    >
+                      {[1, 2, 3, 4].map((segment) => (
+                        <View
+                          key={segment}
+                          style={{
+                            flex: 1,
+                            backgroundColor:
+                              segment <= filledSegments ? accentColor : "transparent",
+                            borderRadius: 1,
+                          }}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                  {/* Score */}
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      fontWeight: "bold",
+                      color: accentColor,
+                    }}
+                  >
+                    {batteryScore.score}/30
+                  </Text>
+                </View>
+              </View>
+
+              {/* Content */}
+              {/* What you're experiencing */}
+              {introMirror && isValidContent(introMirror) && (
+                <View style={{ marginBottom: 6, padding: 7, backgroundColor: `${accentColor}08`, borderRadius: 4 }}>
+                  <Text style={{ fontSize: 8.5, lineHeight: 1.5, color: "#1c3b5a" }}>
+                    {introMirror}
+                  </Text>
+                </View>
+              )}
+
+              {/* Urgency Section - compact */}
+              {urgencyTitle && isValidContent(urgencyTitle) && (
+                <View style={{ marginBottom: 6 }}>
+                  <Text style={{ fontSize: 9, fontWeight: "bold", color: "#DC2626", marginBottom: 3 }}>
+                    ⚠️ {urgencyTitle}
+                  </Text>
+                  {urgency1 && isValidContent(urgency1) && (
+                    <Text style={{ fontSize: 8, marginBottom: 2, color: "#7F1D1D", lineHeight: 1.4 }}>
+                      • {urgency1}
+                    </Text>
+                  )}
+                  {urgency2 && isValidContent(urgency2) && (
+                    <Text style={{ fontSize: 8, color: "#7F1D1D", lineHeight: 1.4 }}>
+                      • {urgency2}
+                    </Text>
+                  )}
+                </View>
+              )}
+
+              {/* Masterclass Teaser - compact */}
+              {masterclassReveal && isValidContent(masterclassReveal) && (
+                <View style={{ padding: 7, backgroundColor: `${accentColor}12`, borderRadius: 4 }}>
+                  <Text style={{ fontSize: 9, fontWeight: "bold", color: accentColor, marginBottom: 3 }}>
+                    {masterclassReveal}
+                  </Text>
+                  {masterclassTeaser && isValidContent(masterclassTeaser) && (
+                    <Text style={{ fontSize: 8, color: "#1c3b5a", lineHeight: 1.5 }}>
+                      {masterclassTeaser}
+                    </Text>
+                  )}
+                </View>
+              )}
+            </View>
+          );
+        })}
+      </View>
+    </Page>
+  );
+};
+
 // Battery Detail Page Component
 const BatteryDetailPage = ({
   batteryScore,
@@ -566,6 +768,100 @@ const BatteryDetailPage = ({
     "FOOTER_FORCE_CTA"
   );
 
+  // NEW: Get urgency and masterclass content for minimal version
+  const urgencyTitle = getContent(batteryScore.battery, batteryScore.level, "URGENCY_TITLE");
+  const urgency1 = getContent(batteryScore.battery, batteryScore.level, "URGENCY_1");
+  const urgency2 = getContent(batteryScore.battery, batteryScore.level, "URGENCY_2");
+  const urgency3 = getContent(batteryScore.battery, batteryScore.level, "URGENCY_3");
+  const masterclassReveal = getContent(batteryScore.battery, batteryScore.level, "MASTERCLASS_REVEAL");
+  const masterclassTeaser = getContent(batteryScore.battery, batteryScore.level, "MASTERCLASS_TEASER");
+
+  // MINIMAL VERSION: Simplified, conversion-focused layout
+  if (VERSION_MODE === 'minimal') {
+    return (
+      <Page size="A4" style={styles.page}>
+        <View style={styles.sheet}>
+          {/* Header */}
+          <View style={styles.header} wrap={false}>
+            <Text style={styles.headerTitle}>Batterie {info.name}</Text>
+            <Text style={styles.headerSubtitle}>{headerSubtitle}</Text>
+          </View>
+
+          {/* What you're experiencing */}
+          {introMirror && isValidContent(introMirror) && (
+            <View style={[styles.section, { marginBottom: 6, padding: 6, backgroundColor: `${accentColor}10` }]}>
+              <Text style={[styles.sectionBody, { fontSize: 8, lineHeight: 1.4 }]}>
+                {introMirror}
+              </Text>
+            </View>
+          )}
+
+          {/* Urgency Section - "In 3 months if you do nothing" */}
+          {urgencyTitle && isValidContent(urgencyTitle) && (
+            <View style={[styles.section, { marginBottom: 6, padding: 6, backgroundColor: "#FEF2F2" }]}>
+              <Text style={[styles.sectionHeader, { color: "#DC2626", marginBottom: 4 }]}>
+                {urgencyTitle}
+              </Text>
+              {urgency1 && isValidContent(urgency1) && (
+                <Text style={[styles.bulletPoint, { fontSize: 7.5, marginBottom: 2, color: "#7F1D1D" }]}>
+                  • {urgency1}
+                </Text>
+              )}
+              {urgency2 && isValidContent(urgency2) && (
+                <Text style={[styles.bulletPoint, { fontSize: 7.5, marginBottom: 2, color: "#7F1D1D" }]}>
+                  • {urgency2}
+                </Text>
+              )}
+              {urgency3 && isValidContent(urgency3) && (
+                <Text style={[styles.bulletPoint, { fontSize: 7.5, color: "#7F1D1D" }]}>
+                  • {urgency3}
+                </Text>
+              )}
+            </View>
+          )}
+
+          {/* Masterclass Teaser - "In the masterclass, you discover" */}
+          {masterclassReveal && isValidContent(masterclassReveal) && (
+            <View style={[styles.section, { marginBottom: 6, padding: 6, backgroundColor: `${accentColor}15`, borderLeft: `3px solid ${accentColor}` }]}>
+              <Text style={[styles.sectionHeader, { color: accentColor, marginBottom: 3 }]}>
+              {masterclassReveal}
+              </Text>
+              {masterclassTeaser && isValidContent(masterclassTeaser) && (
+                <Text style={[styles.sectionBody, { fontSize: 8, fontStyle: "italic", lineHeight: 1.4 }]}>
+                  {masterclassTeaser}
+                </Text>
+              )}
+            </View>
+          )}
+
+          {/* CTA */}
+          {ctaLocal && isValidContent(ctaLocal) && (
+            <View style={{
+              marginTop: 10,
+              padding: 8,
+              backgroundColor: accentColor,
+              borderRadius: 8,
+            }}>
+              <Text style={{ fontSize: 8.5, color: "#fff", textAlign: "center", fontWeight: "bold", lineHeight: 1.5 }}>
+                {ctaLocal}
+              </Text>
+            </View>
+          )}
+
+          {/* Footer */}
+          <View style={[styles.footer, { marginTop: 12 }]}>
+            <Text style={styles.footerBold}>NIIA Coaching</Text>
+            <Link src="https://www.niia.coach/masterclass-gratuite" style={styles.footerBold}>
+              www.niia.coach/masterclass-gratuite
+            </Link>
+            <Text style={styles.footerText}>Masterclass Gratuite - Jeudi à 20h00</Text>
+          </View>
+        </View>
+      </Page>
+    );
+  }
+
+  // FULL VERSION: Detailed content as before
   return (
     <Page size="A4" style={styles.page}>
       <View style={styles.sheet}>
@@ -848,7 +1144,7 @@ const BatteryDetailPage = ({
             }}
           >
             <Link
-              src={VERSION_MODE === 'minimal' ? "https://www.niia.coach/masterclass-gratuite" : "https://www.niia.coach"}
+              src={(VERSION_MODE as string) === 'minimal' ? "https://www.niia.coach/masterclass-gratuite" : "https://www.niia.coach"}
               style={{ textDecoration: "none" }}
             >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -1062,19 +1358,9 @@ const IntroductionPage = () => {
             Ce diagnostic n'est pas un test, mais une{" "}
             <Text style={{ fontWeight: "bold" }}>boussole</Text>.
           </Text>
-          <Text style={styles.introParagraph}>
+          <Text style={{ ...styles.introParagraph, marginBottom: 0 }}>
             Il t'aide à voir où ton énergie fuit, pour mieux la restaurer.
           </Text>
-          {VERSION_MODE === 'minimal' && (
-            <Text style={{ ...styles.introParagraph, marginBottom: 0 }}>
-              Et si tu veux aller plus loin, la Masterclass (Jeudi)
-              t'accompagnera à transformer cet épuisement silencieux en clarté
-              durable —{" "}
-              <Text style={{ fontWeight: "bold" }}>
-                sans culpabilité, en 30 min par jour.
-              </Text>
-            </Text>
-          )}
         </View>
 
         {/* Separator */}
@@ -1467,16 +1753,30 @@ const DiagnosticOverviewPage = ({
           >
             Tes 3 Batteries Prioritaires
           </Text>
-          <Text
-            style={{
-              fontSize: 7.5,
-              color: "#7e8081",
-              textAlign: "center",
-              marginBottom: 10,
-            }}
-          >
-            Focus sur les exercices clés pour recharger ces batteries
-          </Text>
+          {VERSION_MODE === 'minimal' ? (
+            <Text
+              style={{
+                fontSize: 7.5,
+                color: "#d96536",
+                textAlign: "center",
+                marginBottom: 10,
+                fontWeight: "bold",
+              }}
+            >
+              Ce rapport se concentre sur tes 3 batteries les plus critiques
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontSize: 7.5,
+                color: "#7e8081",
+                textAlign: "center",
+                marginBottom: 10,
+              }}
+            >
+              Focus sur les exercices clés pour recharger ces batteries
+            </Text>
+          )}
           {lowestBatteries.map((score, index) => {
             const info = batteryInfo[score.battery];
             const exoTitle = getContent(
@@ -1604,9 +1904,10 @@ const DiagnosticOverviewPage = ({
           <Text
             style={{ fontSize: 6.5, color: "#7e8081", textAlign: "center" }}
           >
-            Les pages suivantes contiennent des exercices détaillés,
-            recommandations scientifiques et actions concrètes pour chaque
-            batterie
+            {VERSION_MODE === 'minimal' 
+              ? "La page suivante contient les détails pour tes 3 Batteries Prioritaires"
+              : "Les pages suivantes contiennent des exercices détaillés, recommandations scientifiques et actions concrètes pour chaque batterie"
+            }
           </Text>
         </View>
       </View>
@@ -1630,17 +1931,23 @@ export const PDFDocument = ({ results }: { results: AssessmentResults }) => {
       {/* Page 2: Diagnostic Overview with Septogram, State, Score & Priority Batteries */}
       <DiagnosticOverviewPage results={results} />
 
-      {/* Pages 3-9: Battery detail pages - ALL 7 batteries, prioritize the 3 lowest first */}
-      {lowestBatteries.map((score) => (
-        <BatteryDetailPage key={score.battery} batteryScore={score} />
-      ))}
-
-      {/* Remaining batteries */}
-      {results.scores
-        .filter((score) => !lowestBatteryTypes.includes(score.battery))
-        .map((score) => (
-          <BatteryDetailPage key={score.battery} batteryScore={score} />
-        ))}
+      {/* Battery detail pages */}
+      {/* MINIMAL: Show 3 lowest batteries on ONE page */}
+      {/* FULL: Show all 7 batteries (3 lowest first, then remaining) - individual pages */}
+      {VERSION_MODE === 'minimal' ? (
+        <CombinedBatteriesPage batteries={lowestBatteries} />
+      ) : (
+        <>
+          {lowestBatteries.map((score) => (
+            <BatteryDetailPage key={score.battery} batteryScore={score} />
+          ))}
+          {results.scores
+            .filter((score) => !lowestBatteryTypes.includes(score.battery))
+            .map((score) => (
+              <BatteryDetailPage key={score.battery} batteryScore={score} />
+            ))}
+        </>
+      )}
 
       {/* Final CTA Page - Conditional based on version */}
       <Page size="A4" style={styles.page}>
@@ -2068,3 +2375,4 @@ export const generatePDF = async (results: AssessmentResults) => {
     alert("Erreur lors de la generation du PDF. Veuillez reessayer.");
   }
 };
+
